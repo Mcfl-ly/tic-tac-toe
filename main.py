@@ -26,10 +26,15 @@ def marcar(indice):
         new_turn = 'X'
         color = 'yellow'
         text.itemconfig(text_id, text=f'O turn.')
-
     buttons[indice].config(text=new_turn, font=("Arial", 20), bg=color)
     t_time += 1
-    print(buttons[indice]['text'])
+    check(buttons)
+
+
+def check(buttons):
+    for i, btn in enumerate(buttons):
+        print(i, btn['text'])
+
 
 for r in range(3):
     for c in range(3):
@@ -37,6 +42,9 @@ for r in range(3):
         btn = tk.Button(window, font=("Arial", 24), command=partial(marcar, indice))
         btn.grid(row=r+1, column=c, sticky="nsew")
         buttons.append(btn)
+
+
+
 
 window.mainloop()
 
