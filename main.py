@@ -28,12 +28,42 @@ def marcar(indice):
         text.itemconfig(text_id, text=f'O turn.')
     buttons[indice].config(text=new_turn, font=("Arial", 20), bg=color)
     t_time += 1
-    check(buttons)
+    check(buttons, new_turn)
 
 
-def check(buttons):
+def check(buttons, turn):
+    player1 = []
+    player2 = []
+    cond_win = [(0, 1, 2), (3, 4, 5), (6, 7, 8),  # horizontais
+                (0, 3, 6), (1, 4, 7), (2, 5, 8),  # verticais
+                (0, 4, 8), (2, 4, 6)  # diagonais
+                ]
     for i, btn in enumerate(buttons):
-        print(i, btn['text'])
+        if btn['text'] == 'X':
+            player1.append(i)
+            # print(i, btn['text'])
+        elif btn['text'] == 'O':
+            player2.append(i)
+    resultado_p1 = any(all(num in player1 for num in tupla) for tupla in cond_win)
+    resultado_p2 = any(all(num in player2 for num in tupla) for tupla in cond_win)
+    if resultado_p1 is True:
+        print(f'Player 1 wins!')
+        text.itemconfig(text_id, text=f'Player 1 wins!')
+        quit_text = tk.Label(text="clique para fechar", font=("Arial", 15))
+        quit_text.grid(row=4, column=0, columnspan=3,sticky='ew')
+        window.bind("<Button-1>", fechar_janela)
+
+    elif resultado_p2 is True:
+        print(f'Player 2 wins!')
+        text.itemconfig(text_id, text=f'Player 2 wins!')
+        quit_text = tk.Label(text="clique para fechar", font=("Arial", 15))
+        quit_text.grid(row=4, column=0, columnspan=3,sticky='ew')
+        window.bind("<Button-1>", fechar_janela)
+
+def fechar_janela(event):
+    window.destroy()
+
+
 
 
 for r in range(3):
@@ -42,9 +72,6 @@ for r in range(3):
         btn = tk.Button(window, font=("Arial", 24), command=partial(marcar, indice))
         btn.grid(row=r+1, column=c, sticky="nsew")
         buttons.append(btn)
-
-
-
 
 window.mainloop()
 
